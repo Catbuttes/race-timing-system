@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.HttpOverrides;
 
 using Microsoft.Identity.Web;
+
+using backend.Database;
+using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,17 +15,57 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
 
-    builder.Services.Configure<ForwardedHeadersOptions>(options =>
-            {
-                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(setupAction: options =>
+{
+    OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
+    {
+        BearerFormat = "JWT",
+        Scheme = "bearer",
+        Description = "Specify the authorization token.",
+        Type = SecuritySchemeType.Http,
+    };
+
+    options.AddSecurityDefinition("Bearer", securityDefinition);
+
+    OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement
+    {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                        },
+                        new string[] {}
+                    }
+    };
+
+    options.AddSecurityRequirement(securityRequirements);
+});
+
+builder.Services.AddDbContext<RTSContext>(options =>
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("RtsDb"));
+});
+
+builder.Services.AddScoped<DatabaseService>();
+
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DatabaseService>();
+    db.Migrate();
+}
+
+
 
 app.Use((context, next) =>
             {
