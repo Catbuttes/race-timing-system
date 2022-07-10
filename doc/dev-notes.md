@@ -8,6 +8,15 @@
 - App Host is fly.io (It's great if you just want a one off thing with light traffic)
 - DNS is Cloudflare
 
+## Task List
+
+- TODO: Add Monitoring withn Prometheus
+- TODO: Add a Healthcheck endpoint
+- TODO: Assign some persistant storage for the DB
+- TODO: Complete the Driver API endpoint (don't forget to reenable authentication)
+- TODO: Complete the Race API endpoint
+- TODO: Complete the Lap API endpoint
+
 ## DB Design
 
 ### Tables
