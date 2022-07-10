@@ -6,6 +6,7 @@
 
 - IDP is Azure AD B2C instance (free for 50k users!)
 - App Host is fly.io (It's great if you just want a one off thing with light traffic)
+- DNS is Cloudflare
 
 ## DB Design
 
@@ -32,7 +33,63 @@
     - TyreId
     - RaceLapNumber
     - LapTime
-- Tyre
+- TagCategory
     - Id
     - Name
     - Description
+    - DriverValid
+    - RaceValid
+    - RaceDriverValid
+    - LapValid
+- Tag
+    - Id
+    - TagCategoryId
+    - Value
+- DriverTag
+    - Id
+    - DriverId
+    - TagId
+- RaceTag
+    - Id
+    - RaceId
+    - TagId
+- RaceDriverTag
+    - Id
+    - RaceDriverId
+    - TagId
+- LapTag
+    - Id
+    - LapId
+    - TagId
+- AttributeDefinition
+    - Id
+    - Name
+    - Description
+    - Type
+    - Required
+    - DriverValid
+    - RaceValid
+    - RaceDriverValid
+    - LapValid
+- DriverAttribute
+    - Id
+    - AttributeClassId
+    - DriverId
+    - Value
+- RaceAttribute
+    - Id
+    - AttributeClassId
+    - RaceId
+    - Value
+- RaceDriverAttribute
+    - Id
+    - AttributeClassId
+    - RaceDriverId
+    - Value
+- LapAttribute
+    - Id
+    - AttributeClassId
+    - LapId
+    - Value
+
+
