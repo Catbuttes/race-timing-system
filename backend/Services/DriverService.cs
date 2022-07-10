@@ -5,18 +5,13 @@ namespace backend.Services
 
     using backend.Database;
 
-    public class DatabaseService
+    public class DriverService
     {
         private RTSContext _db;
 
-        public DatabaseService(RTSContext database)
+        public DriverService(RTSContext database)
         {
             _db = database;
-        }
-
-        public void Migrate()
-        {
-            _db.Database.Migrate();
         }
 
         public async Task<IEnumerable<Models.Driver>> GetDrivers()

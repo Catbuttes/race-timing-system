@@ -54,15 +54,15 @@ builder.Services.AddDbContext<RTSContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("RtsDb"));
 });
 
-builder.Services.AddScoped<DatabaseService>();
+builder.Services.AddScoped<DriverService>();
 
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<DatabaseService>();
-    db.Migrate();
+    var db = scope.ServiceProvider.GetRequiredService<RTSContext>();
+    db.Database.Migrate();
 }
 
 

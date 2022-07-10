@@ -14,9 +14,9 @@ namespace backend.Controllers
     public class DriverController : ControllerBase
     {
         private readonly ILogger<DriverController> _logger;
-        private DatabaseService _db;
+        private DriverService _db;
 
-        public DriverController(ILogger<DriverController> logger, DatabaseService db)
+        public DriverController(ILogger<DriverController> logger, DriverService db)
         {
             _logger = logger;
             _db = db;
