@@ -6,9 +6,9 @@ namespace backend.Database.Models
     {
         [Key]
         public int Id { get; set; }
-        public String? Name { get; set; }
-        public String? Description { get; set; }
-        public String? Type { get; set; }
+        public String Name { get; set; } = null!;
+        public String Description { get; set; } = null!;
+        public String Type { get; set; } = null!;
         public Boolean DriverValid { get; set; }
         public Boolean RaceValid { get; set; }
         public Boolean RaceDriverValid { get; set; }

@@ -45,14 +45,16 @@ namespace backend.Controllers
         [HttpGet]
         [Route("{Id}")]
         [Produces("application/json")]
-        public async Task<Driver> Get(long Id)
+        public async Task<Driver?> Get(long Id)
         {
-            throw new NotImplementedException();
+            var driver = await _db.GetDriver(Id);
+
+            return driver;
         }
 
         [HttpPut]
         [Produces("application/json")]
-        public async Task<Driver> Create([FromBody]Driver driver)
+        public async Task<Driver> Create([FromBody] Driver driver)
         {
             throw new NotImplementedException();
         }
