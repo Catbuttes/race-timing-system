@@ -34,6 +34,7 @@ namespace backend.Services
                     a => new Models.Attribute
                     {
                         DriverAttributeId = a.Id,
+                        DefinitionId = a.DefinitionId,
                         Name = a.Definition.Name,
                         Value = a.Value
                     }
@@ -46,6 +47,7 @@ namespace backend.Services
                     t => new Models.Tag
                     {
                         DriverTagId = t.Id,
+                        TagId = t.TagId,
                         Category = t.Tag.Category.Name,
                         Value = t.Tag.Value
                     }
@@ -78,6 +80,7 @@ namespace backend.Services
                     a => new Models.Attribute
                     {
                         DriverAttributeId = a.Id,
+                        DefinitionId = a.DefinitionId,
                         Name = a.Definition.Name,
                         Value = a.Value
                     }
@@ -90,6 +93,7 @@ namespace backend.Services
                     t => new Models.Tag
                     {
                         DriverTagId = t.Id,
+                        TagId = t.TagId,
                         Category = t.Tag.Category.Name,
                         Value = t.Tag.Value
                     }
