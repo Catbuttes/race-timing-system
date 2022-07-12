@@ -13,6 +13,10 @@ processes = []
   allowed_public_ports = []
   auto_rollback = true
 
+[metrics]
+  port = 80
+  path = "/metrics"
+
 [mounts]
   source="rts_data"
   destination="/data"
