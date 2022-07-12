@@ -4,13 +4,13 @@ namespace backend.Database.Models
     public class RaceAttribute
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public String? Value { get; set; }
 
-        public int RaceId { get; set; }
+        public Guid RaceId { get; set; }
         public Race Race { get; set; } = null!;
         
-        public int DefinitionId { get; set; }
+        public Guid DefinitionId { get; set; }
         public AttributeDefinition Definition { get; set; } = null!;
     }
 }

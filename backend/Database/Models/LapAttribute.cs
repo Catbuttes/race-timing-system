@@ -4,13 +4,13 @@ namespace backend.Database.Models
     public class LapAttribute
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public String? Value { get; set; }
 
-        public int LapId { get; set; }
+        public Guid LapId { get; set; }
         public Lap Lap { get; set; } = null!;
         
-        public int DefinitionId { get; set; }
+        public Guid DefinitionId { get; set; }
         public AttributeDefinition Definition { get; set; } = null!;
     }
 }

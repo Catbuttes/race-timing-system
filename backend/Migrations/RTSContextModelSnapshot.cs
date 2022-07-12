@@ -19,11 +19,12 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.AttributeDefinition", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("DriverValid")
@@ -33,6 +34,7 @@ namespace backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("RaceDriverValid")
@@ -42,6 +44,7 @@ namespace backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -51,7 +54,7 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"),
                             Description = "The team the driver belongs to",
                             DriverValid = true,
                             LapValid = false,
@@ -64,9 +67,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.Driver", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -82,35 +85,35 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("8f9c7d3a-fae0-4570-a619-67d26f070ff5"),
                             Name = "Driver 1",
-                            User = new Guid("3b5a8ee7-de4a-4671-85cd-1c2c87a0ed39")
+                            User = new Guid("8044f000-95ee-4fd9-9707-4ee9737af0cf")
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("d6a9074d-5eb0-4fef-a16e-a024f14edfca"),
                             Name = "Driver 2",
-                            User = new Guid("fd2a664a-214c-410a-bb3b-7c0bf141c1c1")
+                            User = new Guid("d77eeabb-adb5-440b-88b4-d3af56a7fbb2")
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("6a4bc4bb-fa80-45fa-aace-4865837e928a"),
                             Name = "Driver 3",
-                            User = new Guid("564f2489-2369-45bb-aa65-fde69d43d97d")
+                            User = new Guid("46733858-a61e-4d98-8a68-23fbf3849ad2")
                         });
                 });
 
             modelBuilder.Entity("backend.Database.Models.DriverAttribute", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DefinitionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DefinitionId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -127,38 +130,38 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            DefinitionId = 1,
-                            DriverId = 1,
+                            Id = new Guid("1c537108-3001-43db-9fd5-b00fed55bdcb"),
+                            DefinitionId = new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"),
+                            DriverId = new Guid("8f9c7d3a-fae0-4570-a619-67d26f070ff5"),
                             Value = "Team1"
                         },
                         new
                         {
-                            Id = 2,
-                            DefinitionId = 1,
-                            DriverId = 2,
+                            Id = new Guid("101d496f-acfd-42e8-912c-632593ba0d03"),
+                            DefinitionId = new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"),
+                            DriverId = new Guid("d6a9074d-5eb0-4fef-a16e-a024f14edfca"),
                             Value = "Team2"
                         },
                         new
                         {
-                            Id = 3,
-                            DefinitionId = 1,
-                            DriverId = 3,
+                            Id = new Guid("fd669999-4245-48b0-9ab9-1bd7e13f7a02"),
+                            DefinitionId = new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"),
+                            DriverId = new Guid("6a4bc4bb-fa80-45fa-aace-4865837e928a"),
                             Value = "Team3"
                         });
                 });
 
             modelBuilder.Entity("backend.Database.Models.DriverTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -171,32 +174,32 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            DriverId = 1,
-                            TagId = 1
+                            Id = new Guid("889a5af0-e848-42e0-b9a9-554428ba53e0"),
+                            DriverId = new Guid("8f9c7d3a-fae0-4570-a619-67d26f070ff5"),
+                            TagId = new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75")
                         },
                         new
                         {
-                            Id = 2,
-                            DriverId = 2,
-                            TagId = 1
+                            Id = new Guid("cbb0efdc-eda1-4c3b-a50e-8f02550e2006"),
+                            DriverId = new Guid("d6a9074d-5eb0-4fef-a16e-a024f14edfca"),
+                            TagId = new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75")
                         },
                         new
                         {
-                            Id = 3,
-                            DriverId = 3,
-                            TagId = 1
+                            Id = new Guid("f6818e9f-37fc-483e-8afd-8be3f7fab5c5"),
+                            DriverId = new Guid("6a4bc4bb-fa80-45fa-aace-4865837e928a"),
+                            TagId = new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75")
                         });
                 });
 
             modelBuilder.Entity("backend.Database.Models.Lap", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RaceDriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("RaceDriverId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -207,15 +210,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.LapAttribute", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DefinitionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DefinitionId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("LapId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("LapId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("TEXT");
@@ -231,15 +234,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.LapTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("LapId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("LapId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -252,9 +255,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.Race", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -270,15 +273,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.RaceAttribute", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DefinitionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DefinitionId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RaceId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("RaceId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("TEXT");
@@ -294,15 +297,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.RaceDriver", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DriverId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RaceId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("RaceId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -315,15 +318,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.RaceDriverAttribute", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("DefinitionId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("DefinitionId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RaceDriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("RaceDriverId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("TEXT");
@@ -339,15 +342,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.RaceDriverTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RaceDriverId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("RaceDriverId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -360,15 +363,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.RaceTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RaceId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("RaceId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -381,9 +384,9 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.TagCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -412,7 +415,7 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("cd4f4040-d248-412f-86b2-38fffc580398"),
                             Description = "The tyre the driver prefers",
                             DriverValid = true,
                             LapValid = false,
@@ -424,12 +427,12 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Database.Models.TagDefinition", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -444,8 +447,8 @@ namespace backend.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            CategoryId = 1,
+                            Id = new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75"),
+                            CategoryId = new Guid("cd4f4040-d248-412f-86b2-38fffc580398"),
                             Value = "Soft"
                         });
                 });

@@ -13,11 +13,10 @@ namespace backend.Migrations
                 name: "AttributeDefinitions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
                     DriverValid = table.Column<bool>(type: "INTEGER", nullable: false),
                     RaceValid = table.Column<bool>(type: "INTEGER", nullable: false),
                     RaceDriverValid = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -32,8 +31,7 @@ namespace backend.Migrations
                 name: "Drivers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     User = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -46,8 +44,7 @@ namespace backend.Migrations
                 name: "Races",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     User = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
@@ -60,8 +57,7 @@ namespace backend.Migrations
                 name: "TagCategorys",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     DriverValid = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -78,11 +74,10 @@ namespace backend.Migrations
                 name: "DriverAttributes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: false),
-                    DriverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DefinitionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    DriverId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefinitionId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,11 +100,10 @@ namespace backend.Migrations
                 name: "RaceAttributes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: true),
-                    RaceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DefinitionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RaceId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefinitionId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -132,10 +126,9 @@ namespace backend.Migrations
                 name: "RaceDrivers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DriverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RaceId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DriverId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RaceId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,9 +151,8 @@ namespace backend.Migrations
                 name: "TagDefinitions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -178,9 +170,8 @@ namespace backend.Migrations
                 name: "Laps",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RaceDriverId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RaceDriverId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,11 +188,10 @@ namespace backend.Migrations
                 name: "RaceDriverAttributes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: true),
-                    RaceDriverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DefinitionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RaceDriverId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefinitionId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -224,10 +214,9 @@ namespace backend.Migrations
                 name: "DriverTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DriverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TagId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DriverId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TagId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,10 +239,9 @@ namespace backend.Migrations
                 name: "RaceDriverTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RaceDriverId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TagId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RaceDriverId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TagId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -276,10 +264,9 @@ namespace backend.Migrations
                 name: "RaceTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    RaceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TagId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RaceId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TagId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -302,11 +289,10 @@ namespace backend.Migrations
                 name: "LapAttributes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: true),
-                    LapId = table.Column<int>(type: "INTEGER", nullable: false),
-                    DefinitionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    LapId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DefinitionId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -329,10 +315,9 @@ namespace backend.Migrations
                 name: "LapTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    LapId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TagId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    LapId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TagId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -354,62 +339,62 @@ namespace backend.Migrations
             migrationBuilder.InsertData(
                 table: "AttributeDefinitions",
                 columns: new[] { "Id", "Description", "DriverValid", "LapValid", "Name", "RaceDriverValid", "RaceValid", "Type" },
-                values: new object[] { 1, "The team the driver belongs to", true, false, "Team", true, false, "SingleLineOfText" });
+                values: new object[] { new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"), "The team the driver belongs to", true, false, "Team", true, false, "SingleLineOfText" });
 
             migrationBuilder.InsertData(
                 table: "Drivers",
                 columns: new[] { "Id", "Name", "User" },
-                values: new object[] { 1, "Driver 1", new Guid("3b5a8ee7-de4a-4671-85cd-1c2c87a0ed39") });
+                values: new object[] { new Guid("6a4bc4bb-fa80-45fa-aace-4865837e928a"), "Driver 3", new Guid("46733858-a61e-4d98-8a68-23fbf3849ad2") });
 
             migrationBuilder.InsertData(
                 table: "Drivers",
                 columns: new[] { "Id", "Name", "User" },
-                values: new object[] { 2, "Driver 2", new Guid("fd2a664a-214c-410a-bb3b-7c0bf141c1c1") });
+                values: new object[] { new Guid("8f9c7d3a-fae0-4570-a619-67d26f070ff5"), "Driver 1", new Guid("8044f000-95ee-4fd9-9707-4ee9737af0cf") });
 
             migrationBuilder.InsertData(
                 table: "Drivers",
                 columns: new[] { "Id", "Name", "User" },
-                values: new object[] { 3, "Driver 3", new Guid("564f2489-2369-45bb-aa65-fde69d43d97d") });
+                values: new object[] { new Guid("d6a9074d-5eb0-4fef-a16e-a024f14edfca"), "Driver 2", new Guid("d77eeabb-adb5-440b-88b4-d3af56a7fbb2") });
 
             migrationBuilder.InsertData(
                 table: "TagCategorys",
                 columns: new[] { "Id", "Description", "DriverValid", "LapValid", "Name", "RaceDriverValid", "RaceValid" },
-                values: new object[] { 1, "The tyre the driver prefers", true, false, "Tyre", true, false });
+                values: new object[] { new Guid("cd4f4040-d248-412f-86b2-38fffc580398"), "The tyre the driver prefers", true, false, "Tyre", true, false });
 
             migrationBuilder.InsertData(
                 table: "DriverAttributes",
                 columns: new[] { "Id", "DefinitionId", "DriverId", "Value" },
-                values: new object[] { 1, 1, 1, "Team1" });
+                values: new object[] { new Guid("101d496f-acfd-42e8-912c-632593ba0d03"), new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"), new Guid("d6a9074d-5eb0-4fef-a16e-a024f14edfca"), "Team2" });
 
             migrationBuilder.InsertData(
                 table: "DriverAttributes",
                 columns: new[] { "Id", "DefinitionId", "DriverId", "Value" },
-                values: new object[] { 2, 1, 2, "Team2" });
+                values: new object[] { new Guid("1c537108-3001-43db-9fd5-b00fed55bdcb"), new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"), new Guid("8f9c7d3a-fae0-4570-a619-67d26f070ff5"), "Team1" });
 
             migrationBuilder.InsertData(
                 table: "DriverAttributes",
                 columns: new[] { "Id", "DefinitionId", "DriverId", "Value" },
-                values: new object[] { 3, 1, 3, "Team3" });
+                values: new object[] { new Guid("fd669999-4245-48b0-9ab9-1bd7e13f7a02"), new Guid("54a85f54-e87e-4b98-a2fd-a57dd2ab4df0"), new Guid("6a4bc4bb-fa80-45fa-aace-4865837e928a"), "Team3" });
 
             migrationBuilder.InsertData(
                 table: "TagDefinitions",
                 columns: new[] { "Id", "CategoryId", "Value" },
-                values: new object[] { 1, 1, "Soft" });
+                values: new object[] { new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75"), new Guid("cd4f4040-d248-412f-86b2-38fffc580398"), "Soft" });
 
             migrationBuilder.InsertData(
                 table: "DriverTags",
                 columns: new[] { "Id", "DriverId", "TagId" },
-                values: new object[] { 1, 1, 1 });
+                values: new object[] { new Guid("889a5af0-e848-42e0-b9a9-554428ba53e0"), new Guid("8f9c7d3a-fae0-4570-a619-67d26f070ff5"), new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75") });
 
             migrationBuilder.InsertData(
                 table: "DriverTags",
                 columns: new[] { "Id", "DriverId", "TagId" },
-                values: new object[] { 2, 2, 1 });
+                values: new object[] { new Guid("cbb0efdc-eda1-4c3b-a50e-8f02550e2006"), new Guid("d6a9074d-5eb0-4fef-a16e-a024f14edfca"), new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75") });
 
             migrationBuilder.InsertData(
                 table: "DriverTags",
                 columns: new[] { "Id", "DriverId", "TagId" },
-                values: new object[] { 3, 3, 1 });
+                values: new object[] { new Guid("f6818e9f-37fc-483e-8afd-8be3f7fab5c5"), new Guid("6a4bc4bb-fa80-45fa-aace-4865837e928a"), new Guid("b34104e1-efd8-46ec-80f3-b732f8aa6d75") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DriverAttributes_DefinitionId",

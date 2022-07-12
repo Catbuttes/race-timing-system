@@ -5,7 +5,7 @@ namespace backend.Database.Models
     public class AttributeDefinition
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public String Name { get; set; } = null!;
         public String Description { get; set; } = null!;
         public String Type { get; set; } = null!;

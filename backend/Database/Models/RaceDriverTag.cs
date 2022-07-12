@@ -4,10 +4,10 @@ namespace backend.Database.Models
     public class RaceDriverTag
     {
         [Key]
-        public int Id { get; set; }
-        public int RaceDriverId { get; set; }
+        public Guid Id { get; set; }
+        public Guid RaceDriverId { get; set; }
         public RaceDriver RaceDriver { get; set; } = null!;
-        public int TagId { get; set; }
+        public Guid TagId { get; set; }
         public TagDefinition Tag { get; set; } = null!;
     }
 }

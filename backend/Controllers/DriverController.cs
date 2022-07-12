@@ -45,7 +45,7 @@ namespace backend.Controllers
         [HttpGet]
         [Route("{Id}")]
         [Produces("application/json")]
-        public async Task<Driver?> Get(long Id)
+        public async Task<Driver?> Get(Guid Id)
         {
             var driver = await _db.GetDriver(Id);
 

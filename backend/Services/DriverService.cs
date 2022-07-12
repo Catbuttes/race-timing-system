@@ -58,7 +58,7 @@ namespace backend.Services
             return drivers;
         }
 
-        public async Task<Models.Driver?> GetDriver(long driverId)
+        public async Task<Models.Driver?> GetDriver(Guid driverId)
         {
             var driver = await _db.Drivers
             .Where(d => d.Id == driverId)
@@ -104,7 +104,20 @@ namespace backend.Services
             return driver;
         }
 
+        public async Task<Models.Driver> CreateDriver(Models.Driver driver)
+        {
+            throw new NotImplementedException();
+        }
 
+        public async Task<Models.Driver> UpdateDriver(Models.Driver driver)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Boolean> DeleteDriver(Guid driverId)
+        {
+            throw new NotImplementedException();
+        }
     }
     
 }

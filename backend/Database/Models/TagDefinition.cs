@@ -4,8 +4,8 @@ namespace backend.Database.Models
     public class TagDefinition
     {
         [Key]
-        public int Id { get; set; }
-        public int CategoryId { get; set; }
+        public Guid Id { get; set; }
+        public Guid CategoryId { get; set; }
         public TagCategory Category { get; set; } = null!;
         public String Value { get; set; } = null!;
     }

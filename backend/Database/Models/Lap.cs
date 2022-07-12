@@ -5,9 +5,9 @@ namespace backend.Database.Models
     public class Lap
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        public int RaceDriverId { get; set; }
+        public Guid RaceDriverId { get; set; }
         public RaceDriver RaceDriver { get; set; } = null!;
 
         public List<LapTag>? Tags { get; set; }

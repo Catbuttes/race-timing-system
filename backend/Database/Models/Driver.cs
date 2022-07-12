@@ -5,7 +5,7 @@ namespace backend.Database.Models
     public class Driver
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Guid User { get; set; }
         public String Name { get; set; } = null!;
 
