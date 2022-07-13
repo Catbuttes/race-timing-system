@@ -14,12 +14,12 @@ namespace backend.Controllers
     public class DriverController : ControllerBase
     {
         private readonly ILogger<DriverController> _logger;
-        private DriverService _db;
+        private DriverService _driver;
 
-        public DriverController(ILogger<DriverController> logger, DriverService db)
+        public DriverController(ILogger<DriverController> logger, DriverService driver)
         {
             _logger = logger;
-            _db = db;
+            _driver = driver;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Driver>> Get()
         {
-            var drivers = await _db.GetDrivers();
+            var drivers = await _driver.GetAll();
 
             return drivers;
         }
@@ -47,32 +47,69 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<Driver?> Get(Guid Id)
         {
-            var driver = await _db.GetDriver(Id);
+            var driver = await _driver.Get(Id);
 
             return driver;
         }
 
+        [HttpGet]
+        [Route("{Id}/Tag")]
+        [Produces("application/json")]
+        public async Task<IEnumerable<Tag>?> GetTags(Guid Id)
+        {
+            var tags = await _driver.GetTags(Id);
+
+            return tags;
+        }
+
+        [HttpPut]
+        [Route("{DriverId}/Tag/{TagId}")]
+        [Produces("application/json")]
+        public async Task<IEnumerable<Tag>?> TagDriver(Guid DriverId, Guid TagId)
+        {
+            var tags = await _driver.ApplyTag(DriverId, TagId);
+
+            return tags;
+        }
+
+        [HttpDelete]
+        [Route("{DriverId}/Tag/{TagId}")]
+        [Produces("application/json")]
+        public async Task<IEnumerable<Tag>?> DeTagDriver(Guid DriverId, Guid TagId)
+        {
+            var tags = await _driver.RemoveTag(DriverId, TagId);
+
+            return tags;
+        }
+
         [HttpPut]
         [Produces("application/json")]
-        public async Task<Driver> Create([FromBody] Driver driver)
+        public async Task<Driver?> Create([FromBody] Driver driver)
         {
-            throw new NotImplementedException();
+            //TODO: Replace this with the logged in user ID
+            driver.User = Guid.NewGuid();
+
+            var newDriver = await _driver.Create(driver);
+
+            return newDriver;
         }
 
         [HttpPatch]
         [Route("{Id}")]
         [Produces("application/json")]
-        public async Task<Driver> Update([FromBody] Driver driver)
+        public async Task<Driver?> Update([FromBody] Driver driver)
         {
-            throw new NotImplementedException();
+            var newDriver = await _driver.Update(driver);
+
+            return newDriver;
         }
 
         [HttpDelete]
         [Route("{Id}")]
         [Produces("application/json")]
-        public async Task<string> Delete()
+        public async Task<Boolean> Delete(Guid Id)
         {
-            throw new NotImplementedException();
+            return await _driver.Delete(Id);
         }
     }
 
