@@ -8,7 +8,7 @@ namespace backend.Controllers
 
 
 
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DriverController : ControllerBase
@@ -31,6 +31,23 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Driver>> Get()
         {
+            var uid = GetUserObjectId();
+
+            var drivers = await _driver.GetAllMine(uid);
+
+            return drivers;
+        }
+
+        /// <summary>
+        /// Get a list of all drivers for the logger in user
+        /// </summary>
+        /// <returns>A list of drivers</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        [HttpGet]
+        [Route("All")]
+        [Produces("application/json")]
+        public async Task<IEnumerable<Driver>> GetAll()
+        {
             var drivers = await _driver.GetAll();
 
             return drivers;
@@ -47,7 +64,8 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<Driver?> Get(Guid Id)
         {
-            var driver = await _driver.Get(Id);
+            var uid = GetUserObjectId();
+            var driver = await _driver.Get(uid, Id);
 
             return driver;
         }
@@ -57,7 +75,8 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Tag>?> GetTags(Guid Id)
         {
-            var tags = await _driver.GetTags(Id);
+            var uid = GetUserObjectId();
+            var tags = await _driver.GetTags(uid, Id);
 
             return tags;
         }
@@ -67,7 +86,8 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Tag>?> TagDriver(Guid DriverId, Guid TagId)
         {
-            var tags = await _driver.ApplyTag(DriverId, TagId);
+            var uid = GetUserObjectId();
+            var tags = await _driver.ApplyTag(uid, DriverId, TagId);
 
             return tags;
         }
@@ -77,7 +97,8 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<IEnumerable<Tag>?> DeTagDriver(Guid DriverId, Guid TagId)
         {
-            var tags = await _driver.RemoveTag(DriverId, TagId);
+            var uid = GetUserObjectId();
+            var tags = await _driver.RemoveTag(uid, DriverId, TagId);
 
             return tags;
         }
@@ -86,10 +107,11 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<Driver?> Create([FromBody] Driver driver)
         {
+            var uid = GetUserObjectId();
             //TODO: Replace this with the logged in user ID
-            driver.User = Guid.NewGuid();
+            driver.User = uid;
 
-            var newDriver = await _driver.Create(driver);
+            var newDriver = await _driver.Create(uid, driver);
 
             return newDriver;
         }
@@ -99,7 +121,8 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<Driver?> Update([FromBody] Driver driver)
         {
-            var newDriver = await _driver.Update(driver);
+            var uid = GetUserObjectId();
+            var newDriver = await _driver.Update(uid, driver);
 
             return newDriver;
         }
@@ -109,7 +132,17 @@ namespace backend.Controllers
         [Produces("application/json")]
         public async Task<Boolean> Delete(Guid Id)
         {
-            return await _driver.Delete(Id);
+            var uid = GetUserObjectId();
+            return await _driver.Delete(uid, Id);
+        }
+
+        private Guid GetUserObjectId()
+        {
+            var uid = User.Claims
+                .Where(c => c.Type == "http://schemas.microsoft.com/identity/claims/objectidentifier")
+                .First();
+
+            return new Guid(uid.Value);
         }
     }
 
