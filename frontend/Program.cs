@@ -4,12 +4,16 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using frontend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"))
+    .EnableTokenAcquisitionToCallDownstreamApi()
+    .AddDownstreamWebApi("backend", builder.Configuration.GetSection("BackendConfig"))
+    .AddInMemoryTokenCaches();
 
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -20,6 +24,8 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
+
+builder.Services.AddTransient<BackendService>();
 
 var app = builder.Build();
 
