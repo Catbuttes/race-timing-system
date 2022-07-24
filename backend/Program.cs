@@ -54,9 +54,17 @@ builder.Services.AddSwaggerGen(setupAction: options =>
     options.AddSecurityRequirement(securityRequirements);
 });
 
+// builder.Services.AddDbContext<RTSContext>(options =>
+// {
+//     options.UseSqlite(builder.Configuration.GetConnectionString("RtsDb"));
+// });
+
 builder.Services.AddDbContext<RTSContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("RtsDb"));
+    options.UseCosmos(
+        connectionString: builder.Configuration.GetConnectionString("RtsDb"),
+        databaseName: "rts-data"
+    );
 });
 
 builder.Services.AddScoped<DriverService>();
@@ -69,11 +77,11 @@ app.UseHttpMetrics();
 app.UseHttpLogging();
 
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<RTSContext>();
-    db.Database.Migrate();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<RTSContext>();
+//     db.Database.Migrate();
+// }
 
 
 
