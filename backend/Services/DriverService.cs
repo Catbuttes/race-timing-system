@@ -37,24 +37,21 @@ namespace backend.Services
                     {
                         DriverAttributeId = a.Id,
                         DefinitionId = a.DefinitionId,
-                        Name = a.Definition.Name,
+                        Name = "",
                         Value = a.Value
                     }
                 )
                 .ToListAsync();
 
-                driver.Tags = await _db.DriverTags
-                .Where(a => a.DriverId == driver.Id)
-                .Select(
-                    t => new Models.Tag
-                    {
-                        DriverTagId = t.Id,
-                        TagId = t.TagId,
-                        Category = t.Tag.Category.Name,
-                        Value = t.Tag.Value
-                    }
-                )
-                .ToListAsync();
+                driver.Tags = await GetTags(driver.User, driver.Id);
+
+                foreach (var attr in driver.Attributes)
+                {
+                    attr.Name = await _db.AttributeDefinitions
+                        .Where(a => a.Id == attr.DefinitionId)
+                        .Select(a => a.Name)
+                        .SingleAsync();
+                }
             }
 
             return drivers;
@@ -82,24 +79,21 @@ namespace backend.Services
                     {
                         DriverAttributeId = a.Id,
                         DefinitionId = a.DefinitionId,
-                        Name = a.Definition.Name,
+                        Name = "",
                         Value = a.Value
                     }
                 )
                 .ToListAsync();
 
-                driver.Tags = await _db.DriverTags
-                .Where(a => a.DriverId == driver.Id)
-                .Select(
-                    t => new Models.Tag
-                    {
-                        DriverTagId = t.Id,
-                        TagId = t.TagId,
-                        Category = t.Tag.Category.Name,
-                        Value = t.Tag.Value
-                    }
-                )
-                .ToListAsync();
+                driver.Tags = await GetTags(driver.User, driver.Id);
+
+                foreach (var attr in driver.Attributes)
+                {
+                    attr.Name = await _db.AttributeDefinitions
+                        .Where(a => a.Id == attr.DefinitionId)
+                        .Select(a => a.Name)
+                        .SingleAsync();
+                }
             }
 
             return drivers;
@@ -128,11 +122,19 @@ namespace backend.Services
                     {
                         DriverAttributeId = a.Id,
                         DefinitionId = a.DefinitionId,
-                        Name = a.Definition.Name,
+                        Name = "",
                         Value = a.Value
                     }
                 )
                 .ToListAsync();
+
+                foreach (var attr in driver.Attributes)
+                {
+                    attr.Name = await _db.AttributeDefinitions
+                        .Where(a => a.Id == attr.DefinitionId)
+                        .Select(a => a.Name)
+                        .SingleAsync();
+                }
 
                 driver.Tags = await GetTags(userId, driver.Id);
             }
@@ -142,26 +144,52 @@ namespace backend.Services
 
         public async Task<IEnumerable<Models.Tag>?> GetTags(Guid userId, Guid? driverId)
         {
+            var did = await _db.Drivers
+                .Where(d => d.Id == driverId && d.User == userId)
+                .Select(d => d.Id)
+                .SingleAsync();
+
             var tags = await _db.DriverTags
-                .Where(a => a.DriverId == driverId && a.Driver.User == userId)
+                .Where(a => a.DriverId == did)
                 .Select(
                     t => new Models.Tag
                     {
                         DriverTagId = t.Id,
                         TagId = t.TagId,
-                        Category = t.Tag.Category.Name,
-                        Value = t.Tag.Value
+                        Category = "",
+                        Value = ""
                     }
                 )
                 .ToListAsync();
+
+            foreach (var tag in tags)
+            {
+
+                var data = await _db.TagDefinitions
+                    .Where(a => a.Id == tag.TagId)
+                    .Select(a => new { a.CategoryId, a.Value })
+                    .SingleAsync();
+
+                tag.Value = data.Value;
+
+                tag.Category = await _db.TagCategorys
+                    .Where(a => a.Id == data.CategoryId)
+                    .Select(a => a.Name)
+                    .SingleAsync();
+            }
 
             return tags;
         }
 
         public async Task<IEnumerable<Models.Tag>?> ApplyTag(Guid userId, Guid driverId, Guid tagId)
         {
+            var did = await _db.Drivers
+                .Where(d => d.Id == driverId && d.User == userId)
+                .Select(d => d.Id)
+                .SingleAsync();
+
             var tag = await _db.DriverTags
-                .Where(a => a.DriverId == driverId && a.TagId == tagId && a.Driver.User == userId)
+                .Where(a => a.DriverId == did && a.TagId == tagId)
                 .SingleOrDefaultAsync();
 
             if(tag == null)
@@ -182,8 +210,13 @@ namespace backend.Services
 
         public async Task<Models.Attribute?> ApplyAttribute(Guid userId, Guid driverId, Models.Attribute attribute)
         {
+            var did = await _db.Drivers
+                .Where(d => d.Id == driverId && d.User == userId)
+                .Select(d => d.Id)
+                .SingleAsync();
+
             var dbAttribute = await _db.DriverAttributes
-                .Where(a => a.DefinitionId == attribute.DefinitionId && a.DriverId == driverId && a.Driver.User == userId)
+                .Where(a => a.DefinitionId == attribute.DefinitionId && a.DriverId == did)
                 .SingleOrDefaultAsync();
 
             if(dbAttribute == null)
@@ -220,8 +253,13 @@ namespace backend.Services
         }
         public async Task<IEnumerable<Models.Tag>?> RemoveTag(Guid userId, Guid driverId, Guid tagId)
         {
+            var did = await _db.Drivers
+                .Where(d => d.Id == driverId && d.User == userId)
+                .Select(d => d.Id)
+                .SingleAsync();
+
             var tag = await _db.DriverTags
-                .Where(a => a.DriverId == driverId && a.TagId == tagId && a.Driver.User == userId)
+                .Where(a => a.DriverId == did && a.TagId == tagId)
                 .SingleOrDefaultAsync();
 
             if (tag != null)
