@@ -3,14 +3,16 @@ namespace backend.Controllers
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Identity.Web.Resource;
     using backend.Models;
     using backend.Services;
 
 
 
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
+    [RequiredScope("Api.Access")]
     public class TagController : ControllerBase
     {
         private readonly ILogger<TagController> _logger;
@@ -21,51 +23,88 @@ namespace backend.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Get a list of all configured tags
-        /// </summary>
-        /// <returns>A list of tags</returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
+        [Route("Category")]
         [Produces("application/json")]
-        public async Task<IEnumerable<Driver>> Get()
+        public async Task<IEnumerable<TagCategory>> GetCategories()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Gets a specific tag configuration
-        /// </summary>
-        /// <param name="Id">The tag ID</param>
-        /// <returns>The details of a specific tag</returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
-        [Route("{Id}")]
+        [Route("Category/{Id}")]
         [Produces("application/json")]
-        public async Task<Driver?> Get(long Id)
+        public async Task<TagCategory?> GetCategory(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        [Route("Category/{Id}/Definition")]
+        [Produces("application/json")]
+        public async Task<IEnumerable<TagDefinition>> GetDefinitions(Guid Id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        [Route("Category/{categoryId}/Definition/{Id}")]
+        [Produces("application/json")]
+        public async Task<TagDefinition?> GetDefinition(Guid categoryId, Guid Id)
         {
             throw new NotImplementedException();
         }
 
         [HttpPut]
+        [RequiredScope("Tag.Manage")]
+        [Route("Category")]
         [Produces("application/json")]
-        public async Task<Driver> Create([FromBody] Driver driver)
+        public async Task<TagCategory> CreateCategory([FromBody] TagCategory tagCategory)
         {
             throw new NotImplementedException();
         }
 
         [HttpPatch]
-        [Route("{Id}")]
+        [RequiredScope("Tag.Manage")]
+        [Route("Category/{Id}")]
         [Produces("application/json")]
-        public async Task<Driver> Update([FromBody] Driver driver)
+        public async Task<TagCategory> UpdateCategory([FromBody] Tag Tag)
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        [Route("{Id}")]
+        [RequiredScope("Tag.Manage")]
+        [Route("Category/{Id}")]
         [Produces("application/json")]
-        public async Task<string> Delete()
+        public async Task<string> DeleteCategory()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut]
+        [RequiredScope("Tag.Manage")]
+        [Route("Category/{Id}/Definition")]
+        [Produces("application/json")]
+        public async Task<TagDefinition> CreateDefinition([FromBody] TagDefinition tagDefinition)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPatch]
+        [RequiredScope("Tag.Manage")]
+        [Route("Category/{categoryId}/Definition/{Id}")]
+        [Produces("application/json")]
+        public async Task<TagDefinition> UpdateDefinition([FromBody] TagDefinition Tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete]
+        [RequiredScope("Tag.Manage")]
+        [Route("Category/{categoryId}/Definition/{Id}")]
+        [Produces("application/json")]
+        public async Task<string> DeleteDefinition()
         {
             throw new NotImplementedException();
         }
