@@ -1,13 +1,13 @@
 terraform {
   required_providers {
-    random = {
-      source  = "hashicorp/random"
-      version = "3.3.2"
-    }
-
     local = {
       source  = "hashicorp/local"
       version = "2.2.3"
+    }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = "2.2.0"
     }
 
     azurerm = {
@@ -24,24 +24,17 @@ terraform {
 
 provider "azuread" {
   # The RTS User Database Azure AD B2C Tenant I have set up manually
-  tenant_id = var.tenant_id
+  tenant_id = var.ad_tenant_id
 }
 
 provider "azurerm" {
-  tenant_id = var.tenant_id
+  tenant_id = var.azure_tenant_id
   features {}
 }
 
-resource "random_uuid" "api_randomizer" {
-}
-
-resource "random_uuid" "frontend_randomizer" {
-}
-
-
 resource "azuread_application" "api" {
   display_name     = "RTS Backend API"
-  identifier_uris  = ["api://dev.buttes.rts.api/${random_uuid.api_randomizer.result}"]
+  identifier_uris  = ["https://rtsusers.onmicrosoft.com/rtsapi"]
   owners           = [data.azuread_client_config.current.object_id]
   sign_in_audience = "AzureADandPersonalMicrosoftAccount"
 
@@ -56,7 +49,7 @@ resource "azuread_application" "api" {
       type                       = "Admin"
       user_consent_description   = "Allow application access to the API"
       user_consent_display_name  = "API Access"
-      value                      = "API.Access"
+      value                      = "Api.Access"
     }
     oauth2_permission_scope {
       admin_consent_description  = "Allow application access to the API"
@@ -121,6 +114,21 @@ resource "azuread_application" "api" {
 
   }
 
+   # Microsoft Graph Permissions
+  required_resource_access {
+    resource_app_id = "00000003-0000-0000-c000-000000000000"
+
+    resource_access {
+      id   = "37f7f235-527c-4136-accd-4a02d197296e"
+      type = "Scope"
+    }
+
+    resource_access {
+      id   = "7427e0e9-2fba-42fe-b0c0-848c9e6a8182"
+      type = "Scope"
+    }
+  }
+
 }
 
 resource "azuread_service_principal" "api_sp" {
@@ -131,13 +139,13 @@ resource "azuread_service_principal" "api_sp" {
 
 resource "azuread_application" "frontend" {
   display_name     = "RTS Frontend"
-  identifier_uris  = ["api://dev.buttes.rts.frontend/${random_uuid.frontend_randomizer.result}"]
+  identifier_uris  = ["https://rtsusers.onmicrosoft.com/rtsfrontend"]
   owners           = [data.azuread_client_config.current.object_id]
   sign_in_audience = "AzureADandPersonalMicrosoftAccount"
 
   web {
     homepage_url  = "https://rts.buttes.dev"
-    redirect_uris = ["https://rts.buttes.dev/signin-oidc"]
+    redirect_uris = ["https://rts.buttes.dev/signin-oidc", "https://rts-frontend-buttes.azurewebsites.net/signin-oidc"]
 
     implicit_grant {
       access_token_issuance_enabled = true
@@ -215,4 +223,98 @@ resource "azuread_service_principal" "frontend_sp" {
 resource "azuread_application_password" "frontend_pass" {
   application_object_id = azuread_application.frontend.object_id
   end_date_relative     = "1440h"
+}
+
+resource "azurerm_cosmosdb_account" "rtsDb" {
+  name                = "rts-database"
+  resource_group_name = data.azurerm_resource_group.rtsResources.name
+  location            = "eastus"
+  offer_type          = "Standard"
+
+  capabilities {
+    name = "EnableServerless"
+  }
+
+  consistency_policy {
+    consistency_level = "ConsistentPrefix"
+  }
+
+    geo_location {
+      location = "eastus"
+      failover_priority = 0
+    }
+}
+
+resource "azurerm_cosmosdb_sql_database" "rtsDb_database" {
+  name = "rts-data"
+  resource_group_name = data.azurerm_resource_group.rtsResources.name
+  account_name = azurerm_cosmosdb_account.rtsDb.name
+}
+
+resource "azurerm_cosmosdb_sql_container" "rtsDb_container" {
+  name = "RTSContext"
+  resource_group_name = data.azurerm_resource_group.rtsResources.name
+  account_name = azurerm_cosmosdb_account.rtsDb.name
+  database_name = azurerm_cosmosdb_sql_database.rtsDb_database.name
+  partition_key_path    = "/definition/id"
+}
+
+resource "azurerm_service_plan" "rts_service_plan" {
+  name                = "RTS-Service-Plan"
+  resource_group_name = data.azurerm_resource_group.rtsResources.name
+  location            = data.azurerm_resource_group.rtsResources.location
+  os_type             = "Linux"
+  sku_name            = "F1"
+}
+
+resource "azurerm_linux_web_app" "api_app" {
+  name                = "rts-api-buttes"
+  resource_group_name = data.azurerm_resource_group.rtsResources.name
+  location            = azurerm_service_plan.rts_service_plan.location
+  service_plan_id     = azurerm_service_plan.rts_service_plan.id
+  zip_deploy_file     = data.archive_file.backend.output_path
+
+  site_config {
+    always_on         = false
+    health_check_path = "/healthz"
+    application_stack {
+      dotnet_version = "6.0"
+    }
+  }
+
+  app_settings = tomap({
+    "ASPNETCORE_ENVIRONMENT" = "Production"
+    "AzureAdB2C__ClientId" = "${azuread_application.api.application_id}"
+    "AzureAdB2C__TenantId" = "${var.ad_tenant_id}"
+
+    "ConnectionStrings__RtsDb" = "AccountEndpoint=${azurerm_cosmosdb_account.rtsDb.endpoint};AccountKey=${azurerm_cosmosdb_account.rtsDb.primary_key};"
+  })
+
+
+}
+
+resource "azurerm_linux_web_app" "frontend_app" {
+  name                = "rts-frontend-buttes"
+  resource_group_name = data.azurerm_resource_group.rtsResources.name
+  location            = azurerm_service_plan.rts_service_plan.location
+  service_plan_id     = azurerm_service_plan.rts_service_plan.id
+  zip_deploy_file     = data.archive_file.frontend.output_path
+
+  site_config {
+    always_on         = false
+    health_check_path = "/healthz"
+    application_stack {
+      dotnet_version = "6.0"
+    }
+  }
+
+  app_settings = tomap({
+    "AzureAdB2C__ClientId" = "${azuread_application.frontend.application_id}"
+    "AzureAdB2C__TenantId" = "${var.ad_tenant_id}"
+    "AzureAdB2C__ClientSecret" = "${azuread_application_password.frontend_pass.value}"
+
+    "BackendConfig__BaseUrl"   = "https://${azurerm_linux_web_app.api_app.default_hostname}"
+    "BackendConfig__Scopes"   = "https://rtsusers.onmicrosoft.com/rtsapi/Api.Access https://rtsusers.onmicrosoft.com/rtsapi/Driver.Manage"
+    "ASPNETCORE_ENVIRONMENT"   = "Production"
+  })
 }

@@ -11,7 +11,7 @@ output "apiIdentifierUri" {
 }
 
 output "apiTenantId" {
-  value = var.tenant_id
+  value = var.ad_tenant_id
 }
 
 output "apiClientId" {
@@ -19,7 +19,7 @@ output "apiClientId" {
 }
 
 output "frontendTenantId" {
-  value = var.tenant_id
+  value = var.ad_tenant_id
 }
 
 output "frontendClientId" {
@@ -34,7 +34,7 @@ output "frontendClientSecret" {
 resource "local_sensitive_file" "configs" {
   filename = "App Details.txt"
   content  = <<EOL
-Tenant ID: ${var.tenant_id}
+Tenant ID: ${var.ad_tenant_id}
 API Client ID: ${azuread_application.api.application_id}
 Frontend Client ID: ${azuread_application.frontend.application_id}
 Frontend Client Secret: ${azuread_application_password.frontend_pass.value}
