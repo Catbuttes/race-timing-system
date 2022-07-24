@@ -3,6 +3,7 @@ namespace backend.Controllers
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Identity.Web.Resource;
     using backend.Models;
     using backend.Services;
 
@@ -11,6 +12,7 @@ namespace backend.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
+    [RequiredScope("Api.Access")]
     public class DriverController : ControllerBase
     {
         private readonly ILogger<DriverController> _logger;
@@ -39,7 +41,7 @@ namespace backend.Controllers
         }
 
         /// <summary>
-        /// Get a list of all drivers for the logger in user
+        /// Get a list of all drivers
         /// </summary>
         /// <returns>A list of drivers</returns>
         /// <exception cref="NotImplementedException"></exception>
@@ -82,6 +84,7 @@ namespace backend.Controllers
         }
 
         [HttpPut]
+        [RequiredScope("Driver.Manage")]
         [Route("{DriverId}/Tag/{TagId}")]
         [Produces("application/json")]
         public async Task<IEnumerable<Tag>?> TagDriver(Guid DriverId, Guid TagId)
@@ -93,6 +96,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete]
+        [RequiredScope("Driver.Manage")]
         [Route("{DriverId}/Tag/{TagId}")]
         [Produces("application/json")]
         public async Task<IEnumerable<Tag>?> DeTagDriver(Guid DriverId, Guid TagId)
@@ -104,6 +108,7 @@ namespace backend.Controllers
         }
 
         [HttpPut]
+        [RequiredScope("Driver.Manage")]
         [Produces("application/json")]
         public async Task<Driver?> Create([FromBody] Driver driver)
         {
@@ -117,6 +122,7 @@ namespace backend.Controllers
         }
 
         [HttpPatch]
+        [RequiredScope("Driver.Manage")]
         [Route("{Id}")]
         [Produces("application/json")]
         public async Task<Driver?> Update([FromBody] Driver driver)
@@ -128,6 +134,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete]
+        [RequiredScope("Driver.Manage")]
         [Route("{Id}")]
         [Produces("application/json")]
         public async Task<Boolean> Delete(Guid Id)
