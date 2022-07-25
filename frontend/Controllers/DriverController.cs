@@ -7,23 +7,25 @@ using frontend.Models;
 
 namespace frontend.Controllers;
 
-public class HomeController : Controller
+[Authorize]
+[AuthorizeForScopes(Scopes = new string[] { "https://rtsusers.onmicrosoft.com/rtsapi/Api.Access" })]
+public class DriverController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<DriverController> _logger;
     private Services.BackendService _downstream;
-    private string backend;
 
-    public HomeController(ILogger<HomeController> logger, Services.BackendService downstream, IConfiguration _config)
+    public DriverController(ILogger<DriverController> logger, Services.BackendService downstream)
     {
         _logger = logger;
         _downstream = downstream;
-        backend = _config.GetValue<string>("BackendConfig:BaseUrl");
     }
 
     public async Task<IActionResult> Index()
     {
-
-        ViewData["backend"] = backend;
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            ViewData["drivers"] = await _downstream.GetAllDrivers(User);
+        }
         return View();
     }
 
